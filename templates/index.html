@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Link Analyzer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>Phishing Link Analyzer</span>
+      </div>
+      <p class="tagline">Powered by Claude AI &mdash; Real-time phishing &amp; social engineering detection</p>
+    </div>
+  </header>
+
+  <!-- ── Main ───────────────────────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- Search -->
+    <section class="search-section">
+      <div class="search-box">
+        <input
+          type="text"
+          id="url-input"
+          placeholder="https://suspicious-site.com"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="analyze-btn">
+          <span id="btn-text">Analyze</span>
+          <span id="btn-spinner" class="btn-spinner hidden"></span>
+        </button>
+      </div>
+      <p class="search-hint">Paste any URL to check for phishing, brand impersonation, and social engineering tactics</p>
+      <p id="input-error" class="input-error hidden"></p>
+    </section>
+
+    <!-- Progress -->
+    <section id="progress-section" class="progress-section hidden">
+      <p id="analyzing-label" class="analyzing-label">Initializing...</p>
+      <div class="steps">
+
+        <div class="step" id="step-whois">
+          <div class="step-icon" id="icon-whois">
+            <span class="dot"></span>
+          </div>
+          <div class="step-info">
+            <div class="step-name">WHOIS Lookup</div>
+            <div class="step-desc">Domain registration &amp; age</div>
+          </div>
+        </div>
+
+        <div class="step" id="step-ssl">
+          <div class="step-icon" id="icon-ssl">
+            <span class="dot"></span>
+          </div>
+          <div class="step-info">
+            <div class="step-name">SSL Certificate</div>
+            <div class="step-desc">Certificate validity &amp; issuer</div>
+          </div>
+        </div>
+
+        <div class="step" id="step-redirects">
+          <div class="step-icon" id="icon-redirects">
+            <span class="dot"></span>
+          </div>
+          <div class="step-info">
+            <div class="step-name">Redirect Chain</div>
+            <div class="step-desc">HTTP hop tracing</div>
+          </div>
+        </div>
+
+        <div class="step" id="step-claude">
+          <div class="step-icon" id="icon-claude">
+            <span class="dot"></span>
+          </div>
+          <div class="step-info">
+            <div class="step-name">Claude AI Analysis</div>
+            <div class="step-desc">Social engineering detection</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Error panel (shown when any step fails) -->
+    <div id="error-panel" class="error-panel hidden">
+      <div class="error-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="error-content">
+        <div class="error-title">Analysis Failed</div>
+        <div id="error-message" class="error-message"></div>
+        <div id="error-hint" class="error-hint"></div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <section id="results-section" class="results-section hidden">
+
+      <!-- Verdict banner -->
+      <div id="verdict-banner" class="verdict-banner">
+        <div class="verdict-left">
+          <div class="verdict-label">Verdict</div>
+          <div id="verdict-text" class="verdict-text"></div>
+        </div>
+        <div class="verdict-right">
+          <div class="score-label">Risk Score</div>
+          <div id="score-number" class="score-number"></div>
+          <div class="score-track">
+            <div id="score-fill" class="score-fill"></div>
+          </div>
+          <div class="score-scale"><span>Low</span><span>High</span></div>
+        </div>
+      </div>
+
+      <!-- Alert badge -->
+      <div id="alert-badge" class="alert-badge hidden">
+        Telegram alert sent via n8n
+      </div>
+
+      <!-- Data cards -->
+      <div class="cards-grid">
+        <div class="card" id="whois-card">
+          <div class="card-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            WHOIS
+          </div>
+          <div class="card-body" id="whois-body"></div>
+        </div>
+
+        <div class="card" id="ssl-card">
+          <div class="card-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            SSL Certificate
+          </div>
+          <div class="card-body" id="ssl-body"></div>
+        </div>
+
+        <div class="card" id="redirects-card">
+          <div class="card-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            Redirect Chain
+          </div>
+          <div class="card-body" id="redirects-body"></div>
+        </div>
+      </div>
+
+      <!-- Claude analysis -->
+      <div class="card analysis-card">
+        <div class="card-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M12 8v4l3 3"/></svg>
+          Claude AI — Full Analysis
+        </div>
+        <div class="card-body analysis-body" id="analysis-body"></div>
+      </div>
+
+      <!-- Re-analyze button -->
+      <div class="reanalyze-row">
+        <button class="reanalyze-btn" onclick="resetAndFocus()">Analyze another URL</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

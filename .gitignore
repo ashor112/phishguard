@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Built frontend — Render builds this on deploy
+frontend/dist/
+
+# Environment variables — NEVER commit these
+.env
+.env.local
+.env.production
+
+# Logs and runtime files
+backend/logs/
+*.log
+*.bak
+
+# Cloudflare Tunnel — contains local paths and tunnel credentials
+cloudflared/config.yml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/

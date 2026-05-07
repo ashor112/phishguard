@@ -1,0 +1,24 @@
+{
+  "name": "phishing-checker-backend",
+  "version": "1.0.0",
+  "description": "URL safety analysis API — Express backend for the Phishing Link Checker",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build": "cd ../frontend && npm run build"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.2.0",
+    "ssl-checker": "^2.0.8",
+    "whoiser": "^1.17.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,71 @@
+.check-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.check-card--pass   { border-left-color: var(--safe); }
+.check-card--fail   { border-left-color: var(--danger); }
+.check-card--unavail { border-left-color: var(--text-muted); }
+
+.check-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.check-card__icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.check-card__icon.pass   { background: var(--safe-bg);    color: var(--safe);   }
+.check-card__icon.fail   { background: var(--danger-bg);  color: var(--danger); }
+.check-card__icon.unavail{ background: var(--bg-2);       color: var(--text-muted); }
+
+.check-card__name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.check-card__badge-wrap { flex-shrink: 0; }
+
+.check-card__badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+
+.check-card__badge.risk    { background: var(--danger-bg); color: var(--danger); }
+.check-card__badge.pass    { background: var(--safe-bg);   color: var(--safe);   }
+.check-card__badge.unavail { background: var(--bg-2);      color: var(--text-muted); }
+
+.check-card__desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.check-card__details {
+  font-size: 0.83rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.check-card--unavail .check-card__details { color: var(--text-muted); }

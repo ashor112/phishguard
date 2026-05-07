@@ -1,0 +1,5 @@
+flask
+anthropic
+requests
+python-whois
+python-dotenv

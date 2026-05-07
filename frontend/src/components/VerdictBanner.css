@@ -1,0 +1,47 @@
+.verdict-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--vcolor);
+  background: var(--vbg);
+  animation: slideIn 0.25s ease;
+}
+
+.verdict-banner__icon { font-size: 2rem; flex-shrink: 0; }
+
+.verdict-banner__content { flex: 1; min-width: 0; }
+
+.verdict-banner__label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--vcolor);
+  line-height: 1.2;
+}
+
+.verdict-banner__desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.verdict-banner__score {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--vcolor);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.verdict-banner__score span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

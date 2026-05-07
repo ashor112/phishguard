@@ -1,0 +1,133 @@
+{
+  "name": "Phishing Alert Notifier (Telegram)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "phishing-alert",
+        "responseMode": "onReceived",
+        "responseData": "noData",
+        "options": {}
+      },
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "Phishing Alert Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "phishing-alert"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "b1c2d3e4-f5a6-7890-bcde-f12345678901",
+              "leftValue": "={{ $json.body.risk_score }}",
+              "rightValue": 7,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "c1d2e3f4-a5b6-7890-cdef-123456789012",
+              "leftValue": "={{ $json.body.verdict }}",
+              "rightValue": "LIKELY PHISHING",
+              "operator": {
+                "type": "string",
+                "operation": "contains",
+                "rightType": "string"
+              }
+            }
+          ],
+          "combinator": "or"
+        }
+      },
+      "id": "d1e2f3a4-b5c6-7890-def0-234567890123",
+      "name": "Is High Risk?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "8619226099",
+        "text": "=PHISHING ALERT DETECTED\n\nURL: {{ $json.body.url }}\nDomain: {{ $json.body.domain }}\nRisk Score: {{ $json.body.risk_score }}/10\nVerdict: {{ $json.body.verdict }}\n\n--- Technical Indicators ---\nDomain Age: {{ $json.body.whois.age_days }} days\nNewly Registered: {{ $json.body.whois.is_newly_registered }}\nSSL Valid: {{ $json.body.ssl.certificate_valid }}\nCross-Domain Redirect: {{ $json.body.redirects.cross_domain_redirect }}\nRedirect Count: {{ $json.body.redirects.redirect_count }}\n\n--- Claude AI Analysis ---\n{{ $json.body.analysis.substring(0, 2500) }}",
+        "additionalFields": {}
+      },
+      "id": "e1f2a3b4-c5d6-7890-ef01-345678901234",
+      "name": "Send Telegram Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [750, 180],
+      "credentials": {
+        "telegramApi": {
+          "id": "1",
+          "name": "Phishing Analyzer Bot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "f1a2b3c4-d5e6-7890-f012-456789012345",
+      "name": "No Action (Low Risk)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [750, 420]
+    }
+  ],
+  "connections": {
+    "Phishing Alert Webhook": {
+      "main": [
+        [
+          {
+            "node": "Is High Risk?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is High Risk?": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Action (Low Risk)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "id": "a9b8c7d6-e5f4-3210-9876-543210fedcba",
+  "tags": [
+    {
+      "createdAt": "2026-05-01T00:00:00.000Z",
+      "updatedAt": "2026-05-01T00:00:00.000Z",
+      "id": "1",
+      "name": "security"
+    }
+  ]
+}

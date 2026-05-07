@@ -1,0 +1,17 @@
+.share-btn-wrap { display: flex; justify-content: center; }
+
+.share-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.88rem;
+  padding: 10px 24px;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.share-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+}

@@ -1,0 +1,16 @@
+.dark-toggle {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 6px 10px;
+  line-height: 1;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.dark-toggle:hover {
+  border-color: var(--accent);
+  background: var(--bg-2);
+}
